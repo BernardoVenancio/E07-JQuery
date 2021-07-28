@@ -1,56 +1,64 @@
 $(document).ready(()=> {
-
-    $(".cards").flip();
+    var count = 0;
+    $(".cards").flip({
+        trigger:'manual'
+    })
+    $(".cards").click(function(){
+        if(this.state == "unclicked"){
+            $(this).flip(true)
+            this.state = "clicked"
+            count++;
+            cardPair.push(this);
+            check()
+        }
+    })
 })
 
 //Variáveis
-var count = 0;
+var cards = $(".cards").get()
+var firstClick = false;
 var cardPair = []
-var teste = [];
-var teste1 = [];
+cards.forEach(card => {
+    card.state = "unclicked"
+})
 
-//Função para contar numero de cartas viradas
-const contar = () => {
-    count++;
-    if(count > 2){
-        alert("Você perdeu")
-        $(".cards").flip(false)
-        count = 0
-    }else{
-        alert(count);
-    }
-}
-
-const check = () =>{
-    if(count == 2){
+function check(){
+    if(cardPair.length == 2){
         if(cardPair[0].querySelector('.back>img').src == cardPair[1].querySelector('.back>img').src ){
-            $(cardPair[0]).off(".flip");
-            $(cardPair[1]).off(".flip");
-            count = 0;
-            cardPair = [];
+            matched()
         }else{
-            console.log("erro")
-            count = 0;
-            $(cardPair[0]).flip(false);
-            $(cardPair[1]).flip(false);
-            cardPair = [];
+            unmatched(cardPair[0],cardPair[1])
         }
     }
 }
 
-function acerto(){
+function matched(){
+    cardPair[0].state = "blocked"
+    cardPair[1].state = "blocked"
+    count = 0
+    cardPair = []
+}
 
+function unmatched(firstCard,secondCard){
+    setTimeout(() => {
+        $(firstCard).flip(false);
+        $(secondCard).flip(false);
 
+    }, 800);
+    cardPair[0].state = "unclicked"
+    cardPair[1].state = "unclicked"
+    count = 0
+    cardPair = []
 }
 
 //Função que faz uma ação caso a carta seja virada
 $(".cards").on('flip:done',function(){
     var flip = $(this).data("flip-model");
     if(flip.isFlipped){
-        count++;
-        cardPair.push(this);
-        check();
+        console.log("OK")
+        
     }
+    
 })
 
 //Embaralha as cartas
@@ -66,5 +74,10 @@ function embaralhar(){
     for(let i = 0; i < images.length;i++){
         images[i].src = sources[i];
     }
+}
+
+const resetar = () =>{
+    $(".cards").flip();
+    $(".cards").flip(false);
 }
 embaralhar()
