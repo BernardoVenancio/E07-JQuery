@@ -3,7 +3,7 @@
     cursor: pointer;
 }
 
-.tabuleiro>.container-fluid{
+.tabuleiro>.container{
   border: 1px solid black;
   margin-top: 1.5%;
 
