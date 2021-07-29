@@ -1,5 +1,4 @@
 $(document).ready(()=> {
-    var count = 0;
     atualizaPontos();
     atualizaErros()
     $(".cards").flip({
@@ -9,7 +8,6 @@ $(document).ready(()=> {
         if(this.state == "unclicked"){
             $(this).flip(true)
             this.state = "clicked"
-            count++;
             cardPair.push(this);
             check()
         }
@@ -40,7 +38,6 @@ function check(){
 function matched(){
     cardPair[0].state = "blocked"
     cardPair[1].state = "blocked"
-    count = 0
     cardPair = []
     pontos++;
     atualizaPontos()
@@ -53,7 +50,6 @@ function unmatched(firstCard,secondCard){
         $(secondCard).flip(false);
         firstCard.state = "unclicked"
         secondCard.state = "unclicked"
-        count = 0
         tentativas++;
         atualizaErros();
     }, 750);
@@ -85,6 +81,22 @@ function embaralhar(){
         images[i].src = sources[i];
     }
 }
+
+function reiniciarJogo(){
+    embaralhar()
+    $(".cards").flip(false)
+    cards.forEach(card => {
+        card.state = "unclicked"
+    })
+    cardPair = [];
+    tentativas = 0;
+    pontos = 0;
+    atualizaPontos();
+    atualizaErros();
+}
+$("#reiniciar").click(function(){
+    reiniciarJogo()
+})
 
 const atualizaPontos = () =>{
     $(".pontuacao span").text(pontos);
