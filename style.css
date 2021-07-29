@@ -3,7 +3,7 @@
     cursor: pointer;
 }
 
-.tabuleiro>.container{
+.tabuleiro>.container-fluid{
   border: 1px solid black;
   margin-top: 1.5%;
 
@@ -18,7 +18,4 @@
 }
 .back>img,.front>img{
   border-color: black;
-}
-h1{
-  text-align: center;
 }

@@ -1,5 +1,7 @@
 $(document).ready(()=> {
     var count = 0;
+    atualizaPontos();
+    atualizaErros()
     $(".cards").flip({
         trigger:'manual'
     })
@@ -17,7 +19,10 @@ $(document).ready(()=> {
 //Variáveis
 var cards = $(".cards").get()
 var firstClick = false;
-var cardPair = []
+var cardPair = [];
+var pontos = 0;
+var tentativas = 0;
+
 cards.forEach(card => {
     card.state = "unclicked"
 })
@@ -37,18 +42,23 @@ function matched(){
     cardPair[1].state = "blocked"
     count = 0
     cardPair = []
+    pontos++;
+    atualizaPontos()
+
 }
 
 function unmatched(firstCard,secondCard){
     setTimeout(() => {
         $(firstCard).flip(false);
         $(secondCard).flip(false);
-
-    }, 800);
-    cardPair[0].state = "unclicked"
-    cardPair[1].state = "unclicked"
-    count = 0
+        firstCard.state = "unclicked"
+        secondCard.state = "unclicked"
+        count = 0
+        tentativas++;
+        atualizaErros();
+    }, 750);
     cardPair = []
+
 }
 
 //Função que faz uma ação caso a carta seja virada
@@ -76,8 +86,10 @@ function embaralhar(){
     }
 }
 
-const resetar = () =>{
-    $(".cards").flip();
-    $(".cards").flip(false);
+const atualizaPontos = () =>{
+    $(".pontuacao span").text(pontos);
+}
+const atualizaErros = () =>{
+    $(".erros span").text(tentativas);
 }
 embaralhar()
