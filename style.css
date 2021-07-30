@@ -19,3 +19,9 @@
 .back>img,.front>img{
   border-color: black;
 }
+#reiniciar{
+  border: 1px solid blue;
+}
+.timer{
+  font-family: 'Roboto Mono', monospace;
+}

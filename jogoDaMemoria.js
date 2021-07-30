@@ -10,16 +10,27 @@ $(document).ready(()=> {
             this.state = "clicked"
             cardPair.push(this);
             check()
+            if(ligado == false && pontos != pontuacaoMaxima){
+                start();
+            }
         }
     })
 })
 
-//Variáveis
+//Variáveis Jogo Memória
 var cards = $(".cards").get()
 var firstClick = false;
 var cardPair = [];
 var pontos = 0;
 var tentativas = 0;
+const pontuacaoMaxima = 8;
+
+//Variáveis Cronômetro
+var minutos = 0;
+var segundos = 0;
+var t;
+var ligado = false;
+
 
 cards.forEach(card => {
     card.state = "unclicked"
@@ -41,7 +52,7 @@ function matched(){
     cardPair = []
     pontos++;
     atualizaPontos()
-
+    venceuJogo();
 }
 
 function unmatched(firstCard,secondCard){
@@ -95,7 +106,8 @@ function reiniciarJogo(){
     atualizaErros();
 }
 $("#reiniciar").click(function(){
-    reiniciarJogo()
+    reiniciarJogo();
+    resetStopwatch();
 })
 
 const atualizaPontos = () =>{
@@ -104,4 +116,72 @@ const atualizaPontos = () =>{
 const atualizaErros = () =>{
     $(".erros span").text(tentativas);
 }
+function venceuJogo(){
+    if(pontos == 8){
+        stop()
+    }
+}
+
 embaralhar()
+//FUNÇÕES CRONOMETRO
+
+//LOGICA DO CRONOMETO
+function startTimer(){
+    if(segundos < 59){
+        segundos++;
+        atualizaSegundos();
+    }else{
+        segundos = 0;
+        minutos++;
+        atualizaSegundos();
+    }
+    if(minutos <= 59){
+        atualizaMinutos();
+    }else{
+        stop()
+    }
+}
+
+//INICIA O CRONOMETO, INDICA QUE ELE ESTÁ LIGADO E DEFINE UM INTERVALO DE 1000ms (1 SEGUNDO)
+function start(){
+    if(ligado == true){
+        return
+    }
+    t = setInterval(startTimer,1000);
+    ligado = true;
+}
+
+//FUNÇÃO QUE PAUSA O CRONOMETO
+function stop(){
+    clearInterval(t);
+    ligado = false;
+}
+
+//REINICIA O CRONOMETRO E "DESLIGA" ELE , ZERANDO TAMBEM AS VARIAVEIS DE QUE CORRESPONDEM AO TEMPO, ALÉM DE
+//ATUALIZAR O DOM
+
+function resetStopwatch(){
+    clearInterval(t);
+    segundos = 0;
+    minutos = 0;
+    atualizaSegundos();
+    atualizaMinutos();
+    ligado = false;
+}
+
+//FUNÇÕES PARA ATUALIZAR O CRONOMETRO NO CODIGO HTML
+function atualizaSegundos(){
+    if(segundos <= 9){
+        $("#segundos").html("0" + segundos);
+    }else{
+        $("#segundos").html(segundos);
+    }
+}
+function atualizaMinutos(){
+    if(minutos <= 9){
+        $("#minutos").html("0" + minutos);
+    }else{
+        $("#minutos").html(minutos);
+    }
+}
+//PARA O CRONOMETO CASO O JOGADOR TENHA VENCIDO
