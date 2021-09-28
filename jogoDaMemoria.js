@@ -94,7 +94,6 @@ function embaralhar(){
 }
 
 function reiniciarJogo(){
-    embaralhar()
     $(".cards").flip(false)
     cards.forEach(card => {
         card.state = "unclicked"
@@ -104,6 +103,9 @@ function reiniciarJogo(){
     pontos = 0;
     atualizaPontos();
     atualizaErros();
+    setTimeout(() => {
+        embaralhar()
+    }, 750);
 }
 $("#reiniciar").click(function(){
     reiniciarJogo();
